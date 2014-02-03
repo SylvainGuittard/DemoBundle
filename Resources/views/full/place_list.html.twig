@@ -10,10 +10,8 @@
 
                     <div id="place-list-container">
                         {{ render(controller(
-                                'eZDemoBundle:Place:listPlaceListSorted',
-                                    {'locationId': location.id,
-                                    'latitude': "45.76265919999999",
-                                    'longitude': "4.835647699999981"}
+                                'eZDemoBundle:Place:listPlaceList',
+                                    {'locationId': location.id}
                                 )
                             )
                         }}

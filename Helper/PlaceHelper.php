@@ -10,7 +10,6 @@
 namespace EzSystems\DemoBundle\Helper;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
@@ -40,18 +39,57 @@ class PlaceHelper
      */
     private $placeListDistMax;
 
-    public function __construct( Repository $repository, $placeListDistMin, $placeListDistMax )
+    public function __construct( Repository $repository,
+                                 $placeListDistMin,
+                                 $placeListDistMax
+    )
     {
         $this->repository = $repository;
         $this->placeListDistMin = $placeListDistMin;
         $this->placeListDistMax = $placeListDistMax;
-
     }
 
-    //TODO
-    public function generatePlaceListCriterion( Location $location,$latitude, $longitude )
+    /**
+     * Returns all places contained in a place_list
+     *
+     * @param int $locationId id of a place_list
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    public function getPlaceList( $locationId )
     {
-        return new Criterion\LogicalAnd(
+        $location = $this->repository->getLocationService()->loadLocation( $locationId );
+
+        $query = new Query();
+        $query->filter = new Criterion\LogicalAnd(
+            array(
+                new Criterion\ContentTypeIdentifier( "place" ),
+                new Criterion\Subtree( $location->pathString ),
+            )
+        );
+
+        $searchResults = $this->repository->getSearchService()->findContent( $query );
+
+        return $this->buildContentListFromSearchResult( $searchResults );
+    }
+
+    /**
+     * Returns all places contained in a place_list that are located between the range defined in
+     * the default configuration. A sort clause array can be provided in order to sort the results.
+     *
+     * @param int $locationId
+     * @param float $latitude
+     * @param float $longitude
+     * @param array|null $sortClauses
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    public function getPlaceListSorted ( $locationId, $latitude, $longitude, $sortClauses = null )
+    {
+        $location = $this->repository->getLocationService()->loadLocation( $locationId );
+
+        $query = new Query();
+        $query->filter = new Criterion\LogicalAnd(
             array(
                 new Criterion\ContentTypeIdentifier( "place" ),
                 new Criterion\Subtree( $location->pathString ),
@@ -67,8 +105,18 @@ class PlaceHelper
                 )
             )
         );
+
+        if ( $sortClauses )
+        {
+            $query->sortClauses = $sortClauses;
+        }
+
+        $searchResults = $this->repository->getSearchService()->findContent( $query );
+
+        return $this->buildContentListFromSearchResult( $searchResults );
     }
 
+    //TODO create a specific helper ?
     /**
      * Builds a Content list from $searchResult.
      * Returned array consists of a hash of Content objects, indexed by their ID.
