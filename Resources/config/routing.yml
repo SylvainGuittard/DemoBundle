@@ -3,9 +3,7 @@
 ezpublish_ezdemo_ajax_sorted_place_list:
     path: /placelist/{locationId}/{latitude}/{longitude}
     defaults:
-        _controller: eZDemoBundle:Demo:listPlaceListSorted
+        _controller: eZDemoBundle:Place:listPlaceListSorted
     methods: [GET]
     requirements:
         locationId: \d+
-#TODO        latitude:
-#TODO        longitude:

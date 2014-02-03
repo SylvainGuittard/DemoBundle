@@ -1,6 +1,7 @@
 parameters:
     ezdemo.criteria_helper.class: EzSystems\DemoBundle\Helper\CriteriaHelper
     ezdemo.menu_helper.class: EzSystems\DemoBundle\Helper\MenuHelper
+    ezdemo.place_helper.class: EzSystems\DemoBundle\Helper\PlaceHelper
     # Default limit that will be applied when retrieving content for menus.
     ezdemo.menu_helper.default_limit: 10
 
@@ -13,3 +14,7 @@ services:
     ezdemo.menu_helper:
         class: %ezdemo.menu_helper.class%
         arguments: [@ezpublish.api.repository, %ezdemo.menu_helper.default_limit%]
+
+    ezdemo.place_helper:
+            class: %ezdemo.place_helper.class%
+            arguments: [@ezpublish.api.repository, %ezdemo.places.place_list.min%, %ezdemo.places.place_list.max%]

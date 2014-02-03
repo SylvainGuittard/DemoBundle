@@ -12,6 +12,7 @@ namespace EzSystems\DemoBundle\Controller;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use EzSystems\DemoBundle\Helper\CriteriaHelper;
+use EzSystems\DemoBundle\Helper\PlaceHelper;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -27,32 +28,15 @@ class PlaceController extends Controller
         // Getting location and content from ezpublish dedicated services
         $repository = $this->getRepository();
         $location = $repository->getLocationService()->loadLocation( $locationId );
-        /** @var CriteriaHelper $criteria */
-        $criteria = $this->get( 'ezdemo.criteria_helper' );
+
+        /** @var PlaceHelper $placeHelper */
+        $placeHelper = $this->get( 'ezdemo.place_helper' );
 
         /** @var LocaleConverterInterface $localeConverter */
         $localeConverter = $this->get( 'ezpublish.locale.converter' );
 
-        //TODO refactor query to use a service
-
         $query = new Query();
-        $query->filter = $criteria->generatePlaceListCriterion( $location, $latitude, $longitude );
-        /*new Criterion\LogicalAnd(
-            array(
-                new Criterion\ContentTypeIdentifier( "place" ),
-                new Criterion\Subtree( $location->pathString ),
-                new Criterion\MapLocationDistance(
-                    "location",
-                    Criterion\Operator::BETWEEN,
-                    array(
-                        $this->container->getParameter( 'ezdemo.places.place_list.min' ),
-                        $this->container->getParameter( 'ezdemo.places.place_list.max' )
-                    ),
-                    $latitude,
-                    $longitude
-                )
-            )
-        );*/
+        $query->filter = $placeHelper->generatePlaceListCriterion( $location, $latitude, $longitude );
 
         $query->sortClauses = array(
             new SortClause\MapLocationDistance(

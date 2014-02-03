@@ -27,16 +27,25 @@ class PlaceHelper
     private $repository;
 
     /**
-     * Default limit for content list in menus.
+     * Min distance to display items in the place list
      *
      * @var int
      */
-    private $defaultMenuLimit;
+    private $placeListDistMin;
 
-    public function __construct( Repository $repository, $defaultMenuLimit )
+    /**
+     * Max distance to display items in the place list
+     *
+     * @var int
+     */
+    private $placeListDistMax;
+
+    public function __construct( Repository $repository, $placeListDistMin, $placeListDistMax )
     {
         $this->repository = $repository;
-        $this->defaultMenuLimit = $defaultMenuLimit;
+        $this->placeListDistMin = $placeListDistMin;
+        $this->placeListDistMax = $placeListDistMax;
+
     }
 
     //TODO
@@ -50,8 +59,8 @@ class PlaceHelper
                     "location",
                     Criterion\Operator::BETWEEN,
                     array(
-                        0,//$this->configResolver->getParameter( 'ezdemo.places.place_list.min' ), //FIXME
-                        3//$this->configResolver->getParameter( 'ezdemo.places.place_list.max' )
+                        $this->placeListDistMin,
+                        $this->placeListDistMax
                     ),
                     $latitude,
                     $longitude
