@@ -14,12 +14,23 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use DateTime;
 use DateInterval;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
  * Helper class for building criteria easily.
  */
 class CriteriaHelper
 {
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
+    public function __construct( ConfigResolverInterface $configResolver )
+    {
+        $this->configResolver = $configResolver;
+    }
+
     /**
      * Generates an exclude criterion based on contentType identifiers.
      *
@@ -106,5 +117,7 @@ class CriteriaHelper
 
         return new Criterion\LogicalAnd( $criteria );
     }
+
+
 
 }

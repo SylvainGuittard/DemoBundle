@@ -1,0 +1,46 @@
+{% extends "eZDemoBundle::pagelayout.html.twig" %}
+
+{% block content %}
+    <section class="content-view-full">
+        <div class="class-blog">
+            <div class="row">
+                <div class="span8">
+
+                    <h1>{{ ez_render_field( content, 'name') }}</h1>
+
+                    <div id="place-list-container">
+                        {{ render(controller(
+                                'eZDemoBundle:Place:listPlaceListSorted',
+                                    {'locationId': location.id,
+                                    'latitude': "45.76265919999999",
+                                    'longitude': "4.835647699999981"}
+                                )
+                            )
+                        }}
+
+                    </div>
+
+                </div>
+                {#<div class="span4">#}
+                    {#<aside>#}
+                        {#<section class="content-view-aside">#}
+
+                            {#{% if not ez_is_field_empty( content, 'description' ) %}#}
+                                {#<h2>{{ "Description"|trans }}</h2>#}
+                                {#<article>#}
+                                    {#<div class="attribute-description">#}
+                                        {#{{ ez_render_field( content, 'description' ) }}#}
+                                    {#</div>#}
+                                {#</article>#}
+                            {#{% endif %}#}
+
+                            {#&#123;&#35; This is a call to a subrequest calling legacy code &#35;&#125;#}
+                            {#{{ render( controller( 'eZDemoBundle:Demo:viewExtraInfo', {'location': location} ) ) }}#}
+
+                        {#</section>#}
+                    {#</aside>#}
+                {#</div>#}
+            </div>
+        </div>
+    </section>
+{% endblock %}

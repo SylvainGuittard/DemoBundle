@@ -34,6 +34,10 @@ system:
                     template: "eZDemoBundle:full:landing_page.html.twig"
                     match:
                         Identifier\ContentType: "landing_page"
+                place_list:
+                    template: "eZDemoBundle:full:place_list.html.twig"
+                    match:
+                        Identifier\ContentType: [place_list]
 
             line:
                 article:
