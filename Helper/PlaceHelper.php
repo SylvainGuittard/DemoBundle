@@ -116,7 +116,7 @@ class PlaceHelper
         return $this->buildContentListFromSearchResult( $searchResults );
     }
 
-    //TODO create a specific helper ?
+    //FIXME this method is a copy of the one from the MenuHelper we need to find a way to externalize them
     /**
      * Builds a Content list from $searchResult.
      * Returned array consists of a hash of Content objects, indexed by their ID.

@@ -18,6 +18,66 @@
 
                     </div>
 
+                    <button id="sort-place-list" disabled="disabled">Sort</button>
+                    <div id="sort-place-list-errors"></div>
+
+
+                    <script>
+
+                        YUI(YUI3_config).use('io-base', 'node', function(Y) {
+                            var uri = '{{ path(
+                                'ezpublish_ezdemo_ajax_sorted_place_list',
+                                {'locationId': location.id, 'latitude': 'latitude', 'longitude': 'longitude'}
+                            ) }}';
+
+                            var noGeoLocateMsg = '{{ 'Geolocation feature is not available on your browser, please consider updating it.'|trans }}',
+                                disabledGeoLocateMsg = '{{ 'Geolocation feature is disabled on your browser. Check the permission settings to allow it.'|trans }}',
+                                ajaxErrorMsg = '{{ 'Your request has failed, please try again later.'|trans }}';
+
+                            var container = Y.one('#place-list-container'),
+                                button = Y.one('#sort-place-list'),
+                                errorContainer = Y.one('#sort-place-list-errors');
+
+                            if ("geolocation" in navigator) {
+                                button.set('disabled', false);
+                            }else{
+                                errorContainer.setHTML(noGeoLocateMsg);
+                            }
+
+                            button.on('click', function (e) {
+
+                                e.preventDefault();
+
+                                container.addClass('place-list-loading');
+
+                                navigator.geolocation.getCurrentPosition(function (position) {
+                                    var config = {
+                                        method: 'GET',
+                                        on: {
+                                            start: function () {
+
+                                            },
+                                            success: function (id, response) {
+                                                container.setHTML(response.responseText);
+                                                container.removeClass('place-list-loading');
+                                            },
+                                            failure: function (id, response) {
+                                                container.removeClass('place-list-loading');
+                                                errorContainer.setHTML(ajaxErrorMsg);
+                                            }
+                                        }
+                                    };
+                                    uri = uri.replace('latitude', position.coords.latitude).replace('longitude', position.coords.longitude);
+
+                                    Y.io(uri, config);
+
+                                }, function () {
+                                    errorContainer.setHTML(disabledGeoLocateMsg);
+                                });
+                            });
+                        });
+                    </script>
+
                 </div>
                 {#<div class="span4">#}
                     {#<aside>#}

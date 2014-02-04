@@ -64,7 +64,7 @@ class PlaceController extends Controller
                 $latitude,
                 $longitude,
                 Query::SORT_ASC,
-                $localeConverter->convertToEz( $this->getRequest()->getLocale() )
+                $localeConverter->convertToEz( $this->getRequest()->getLocale() ) //FIXME get from SA
             )
         );
 

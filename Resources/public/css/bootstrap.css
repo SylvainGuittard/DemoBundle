@@ -5125,3 +5125,6 @@ div.ezcom-setting-mail {
 #ezwt-content input[disabled] {
   background-color: transparent;
 }
+.place-list-loading {
+  opacity: 0.5;
+}
