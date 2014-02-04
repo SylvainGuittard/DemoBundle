@@ -54,8 +54,6 @@ class PlaceController extends Controller
     {
         /** @var PlaceHelper $placeHelper */
         $placeHelper = $this->get( 'ezdemo.place_helper' );
-        /** @var LocaleConverterInterface $localeConverter */
-        $localeConverter = $this->get( 'ezpublish.locale.converter' );
 
         $sortClauses = array(
             new SortClause\MapLocationDistance(
@@ -64,7 +62,7 @@ class PlaceController extends Controller
                 $latitude,
                 $longitude,
                 Query::SORT_ASC,
-                $localeConverter->convertToEz( $this->getRequest()->getLocale() ) //FIXME get from SA
+                $this->getConfigResolver()->getParameter( 'languages' )[0]
             )
         );
 
