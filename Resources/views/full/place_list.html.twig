@@ -25,16 +25,16 @@
                     <script>
 
                         YUI(YUI3_config).use('io-base', 'node', function(Y) {
+                            //Generating URL with dummy values that will be replaced when clicking
                             var uri = '{{ path(
                                 'ezpublish_ezdemo_ajax_sorted_place_list',
-                                {'locationId': location.id, 'latitude': 'latitude', 'longitude': 'longitude'}
+                                {'locationId': location.id, 'latitude': '0.0', 'longitude': '1.0'}
                             ) }}';
 
                             var noGeoLocateMsg = '{{ 'Geolocation feature is not available on your browser, please consider updating it.'|trans }}',
                                 disabledGeoLocateMsg = '{{ 'Geolocation feature is disabled on your browser. Check the permission settings to allow it.'|trans }}',
-                                ajaxErrorMsg = '{{ 'Your request has failed, please try again later.'|trans }}';
-
-                            var container = Y.one('#place-list-container'),
+                                ajaxErrorMsg = '{{ 'Your request has failed, please try again later.'|trans }}',
+                                container = Y.one('#place-list-container'),
                                 button = Y.one('#sort-place-list'),
                                 errorContainer = Y.one('#sort-place-list-errors');
 
@@ -67,37 +67,18 @@
                                             }
                                         }
                                     };
-                                    uri = uri.replace('latitude', position.coords.latitude).replace('longitude', position.coords.longitude);
+                                    uri = uri.replace('0.0', position.coords.latitude).replace('1.0', position.coords.longitude);
 
                                     Y.io(uri, config);
 
                                 }, function () {
+                                    container.removeClass('place-list-loading');
                                     errorContainer.setHTML(disabledGeoLocateMsg);
                                 });
                             });
                         });
                     </script>
-
                 </div>
-                {#<div class="span4">#}
-                    {#<aside>#}
-                        {#<section class="content-view-aside">#}
-
-                            {#{% if not ez_is_field_empty( content, 'description' ) %}#}
-                                {#<h2>{{ "Description"|trans }}</h2>#}
-                                {#<article>#}
-                                    {#<div class="attribute-description">#}
-                                        {#{{ ez_render_field( content, 'description' ) }}#}
-                                    {#</div>#}
-                                {#</article>#}
-                            {#{% endif %}#}
-
-                            {#&#123;&#35; This is a call to a subrequest calling legacy code &#35;&#125;#}
-                            {#{{ render( controller( 'eZDemoBundle:Demo:viewExtraInfo', {'location': location} ) ) }}#}
-
-                        {#</section>#}
-                    {#</aside>#}
-                {#</div>#}
             </div>
         </div>
     </section>

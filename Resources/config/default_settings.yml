@@ -20,5 +20,9 @@ parameters:
     # Maximum distance in km for the places lookup
     ezdemo.places.place_list.max: 10
 
+    # List of content types to be displayed in the place list
+    ezdemo.places.place_list.content_types:
+        - place
+
     ## Cache settings
     ezdemo.cache.feed_reader_ttl: 3600

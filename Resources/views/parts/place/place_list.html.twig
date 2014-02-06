@@ -1,10 +1,14 @@
-
+{#
+  Displays a list of places.
+  Expected parameters :
+      - places: a list of place Content
+#}
 
 {% for place in places %}
 
     <div class="place-list">
         <h3>{{ ez_render_field( place, 'name' ) }}</h3>
-        {{ ez_render_field( place, 'image', { parameters: {'alias' : 'small'} } ) }}
+        {#{{ ez_render_field( place, 'image', { parameters: {'alias' : 'original'} } ) }}#}
         {{ ez_render_field( place, 'description' ) }}
     </div>
 

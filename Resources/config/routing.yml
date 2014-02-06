@@ -7,3 +7,5 @@ ezpublish_ezdemo_ajax_sorted_place_list:
     methods: [GET]
     requirements:
         locationId: \d+
+        latitude: (-)?\d{1,2}(\.\d+)?
+        longitude: (-)?\d{1,2}(\.\d+)?
