@@ -1,7 +1,7 @@
 
 # Ajax place_list
 ezpublish_ezdemo_ajax_sorted_place_list:
-    path: /placelist/{locationId}/{latitude}/{longitude}
+    path: /placelist/{locationId}/{latitude}/{longitude}/{maxDist}
     defaults:
         _controller: eZDemoBundle:Place:listPlaceListSorted
     methods: [GET]
@@ -9,3 +9,4 @@ ezpublish_ezdemo_ajax_sorted_place_list:
         locationId: \d+
         latitude: (-)?\d{1,2}(\.\d+)?
         longitude: (-)?\d{1,2}(\.\d+)?
+        maxDist: \d+

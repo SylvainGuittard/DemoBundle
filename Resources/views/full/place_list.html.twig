@@ -6,6 +6,16 @@
             <div class="row">
                 <div class="span8">
 
+                    <button id="sort-place-list" disabled="disabled">{{ 'Show me'|trans }}</button>
+                    <p>{{ 'places close to me,' }}</p>
+                    <select id="max-dist-place-list">
+                        <option value="1000">1000km</option>
+                        <option value="100">100km</option>
+                        <option value="10">10km</option>
+                        <option value="1">1km</option>
+                    </select>
+                    <div id="sort-place-list-errors"></div>
+
                     <h1>{{ ez_render_field( content, 'name') }}</h1>
 
                     <div id="place-list-container">
@@ -18,9 +28,6 @@
 
                     </div>
 
-                    <button id="sort-place-list" disabled="disabled">Sort</button>
-                    <div id="sort-place-list-errors"></div>
-
 
                     <script>
 
@@ -28,7 +35,7 @@
                             //Generating URL with dummy values that will be replaced when clicking
                             var uri = '{{ path(
                                 'ezpublish_ezdemo_ajax_sorted_place_list',
-                                {'locationId': location.id, 'latitude': '0.0', 'longitude': '1.0'}
+                                {'locationId': location.id, 'latitude': '0.0', 'longitude': '1.0','maxDist': '42'}
                             ) }}';
 
                             var noGeoLocateMsg = '{{ 'Geolocation feature is not available on your browser, please consider updating it.'|trans }}',
@@ -67,9 +74,12 @@
                                             }
                                         }
                                     };
-                                    uri = uri.replace('0.0', position.coords.latitude).replace('1.0', position.coords.longitude);
+                                    var maxDist = Y.one('#max-dist-place-list').get('value');
 
-                                    Y.io(uri, config);
+                                    Y.io(
+                                        uri.replace('0.0', position.coords.latitude).replace('1.0', position.coords.longitude).replace('42', maxDist),
+                                        config
+                                    );
 
                                 }, function () {
                                     container.removeClass('place-list-loading');

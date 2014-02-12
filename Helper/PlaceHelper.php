@@ -30,20 +30,20 @@ class PlaceHelper
      *
      * @var int
      */
-    private $placeListDistMin;
+    private $placeListMinDist;
 
     /**
      * Max distance in kilometers to display items in the place list
      *
      * @var int
      */
-    private $placeListDistMax;
+    private $placeListMaxDist;
 
-    public function __construct( Repository $repository, $placeListDistMin, $placeListDistMax )
+    public function __construct( Repository $repository, $placeListMinDist, $placeListMaxDist )
     {
         $this->repository = $repository;
-        $this->placeListDistMin = $placeListDistMin;
-        $this->placeListDistMax = $placeListDistMax;
+        $this->placeListMinDist = $placeListMinDist;
+        $this->placeListMaxDist = $placeListMaxDist;
     }
 
     /**
@@ -79,13 +79,19 @@ class PlaceHelper
      * @param float $latitude
      * @param float $longitude
      * @param string|string[] $contentTypes to be retrieved
+     * @param int $maxDist Maximum distance for the search in km
      * @param array $sortClauses
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
-    public function getPlaceListSorted( $locationId, $latitude, $longitude, $contentTypes, $sortClauses = array() )
+    public function getPlaceListSorted( $locationId, $latitude, $longitude, $contentTypes, $maxDist = null, $sortClauses = array() )
     {
         $location = $this->repository->getLocationService()->loadLocation( $locationId );
+
+        if ( $maxDist == null )
+        {
+            $maxDist = $this->placeListMaxDist;
+        }
 
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
@@ -96,8 +102,8 @@ class PlaceHelper
                     "location",
                     Criterion\Operator::BETWEEN,
                     array(
-                        $this->placeListDistMin,
-                        $this->placeListDistMax
+                        $this->placeListMinDist,
+                        $maxDist
                     ),
                     $latitude,
                     $longitude

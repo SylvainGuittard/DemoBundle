@@ -47,10 +47,11 @@ class PlaceController extends Controller
      * @param int|string $locationId
      * @param float $latitude
      * @param float $longitude
+     * @param int $maxDist Maximum distance for the search in km
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listPlaceListSortedAction( $locationId, $latitude, $longitude )
+    public function listPlaceListSortedAction( $locationId, $latitude, $longitude, $maxDist )
     {
         /** @var PlaceHelper $placeHelper */
         $placeHelper = $this->get( 'ezdemo.place_helper' );
@@ -71,6 +72,7 @@ class PlaceController extends Controller
             $latitude,
             $longitude,
             $this->container->getParameter( 'ezdemo.places.place_list.content_types' ),
+            $maxDist,
             $sortClauses
         );
 
